@@ -12,6 +12,7 @@ const history_1 = require("./lib/history");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 const server = http_1.default.createServer(app);
+const PORT = process.env.PORT || 4000;
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: ["https://your-frontend.vercel.app", "*"],
@@ -28,6 +29,6 @@ app.get("/", (_, res) => {
 app.get("/matches", (req, res) => {
     res.json(history_1.matchHistory);
 });
-server.listen(4000, () => {
+server.listen(PORT, () => {
     console.log("Server running on http://localhost:4000");
 });
