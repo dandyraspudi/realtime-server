@@ -1,21 +1,18 @@
 import { createAdapter } from "@socket.io/redis-adapter";
 import { createClient } from "redis";
-import { Server } from "socket.io";
 
-export async function setupRedisAdapter(io: Server) {
-  if (!process.env.REDIS_URL) {
-    console.log("⚠️ Redis disabled (no REDIS_URL)");
+export async function setupRedisAdapter(io: any) {
+  const url = process.env.REDIS_URL;
+
+  if (!url) {
+    console.log("⚠️ No REDIS_URL, running without Redis");
     return;
   }
 
   console.log("🔴 Connecting to Redis...");
 
   const pubClient = createClient({
-    url: process.env.REDIS_URL,
-    socket: {
-      tls: true, // IMPORTANT for Railway
-      reconnectStrategy: (retries) => Math.min(retries * 50, 1000),
-    },
+    url, // IMPORTANT: use full URL
   });
 
   const subClient = pubClient.duplicate();
@@ -25,5 +22,5 @@ export async function setupRedisAdapter(io: Server) {
 
   io.adapter(createAdapter(pubClient, subClient));
 
-  console.log("✅ Redis connected");
+  console.log("✅ Redis adapter connected");
 }
