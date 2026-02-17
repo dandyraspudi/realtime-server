@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import { setupRedisAdapter } from "./lib/redis";
+import { setupRedisAdapter } from "./redis";
 import { matchHistory } from "./lib/history";
 
 const app = express();
