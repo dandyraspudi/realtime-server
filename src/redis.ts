@@ -2,7 +2,7 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import { createClient } from "redis";
 import { Server } from "socket.io";
 
-export async function setupRedis(io: Server) {
+export async function setupRedisAdapter(io: Server) {
   if (!process.env.REDIS_URL) {
     console.log("⚠️ Redis disabled (no REDIS_URL)");
     return;
