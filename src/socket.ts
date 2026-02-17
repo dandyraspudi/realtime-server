@@ -83,8 +83,13 @@ export function registerSocket(io: Server) {
       const room = rooms[roomId];
       const now = Date.now();
       const last = lastAttack.get(socket.id) || 0;
+      const updatedRoom = attack(room, socket.id);
 
-    //   check attack cooldown (1 sec) | spam prevention
+      if (updatedRoom.winner) {
+        io.to(roomId).emit("game-over", updatedRoom);
+      }
+
+      //   check attack cooldown (1 sec) | spam prevention
       if (now - last < 1000) return; // 1 sec cooldown
       lastAttack.set(socket.id, now);
 
@@ -92,7 +97,6 @@ export function registerSocket(io: Server) {
 
       if (room.turn !== socket.id) return; // anti cheat
 
-      const updatedRoom = attack(room, socket.id);
       startTurnTimer(io, updatedRoom);
       io.to(roomId).emit("battle:update", updatedRoom);
     });
