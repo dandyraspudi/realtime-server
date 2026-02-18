@@ -17,7 +17,7 @@ const io = new Server(server, {
   cors: {
     origin: "*",
   },
-  transports: ["websocket"],
+  transports: ["polling", "websocket"],
 });
 
 // redis setup
